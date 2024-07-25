@@ -29,7 +29,11 @@ const booksSchema=new mongoose.Schema({
     },
     edition:{
         type:Number
-    }
+    },
+    content:{
+        type:String,
+        required:true
+    },
 },{
     timestamps:true,
 })

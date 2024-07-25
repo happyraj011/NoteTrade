@@ -9,7 +9,7 @@ export async function POST(request:NextRequest) {
   try {
     const reqBody=await request.json();
     if(!reqBody.boardName ||  !reqBody.className  ||  !reqBody.subjectName  ||  
-        !reqBody.price ){
+        !reqBody.price ||  !reqBody.content){
              return NextResponse.json({
              success:false,
              message:"Please provide all required fields",
