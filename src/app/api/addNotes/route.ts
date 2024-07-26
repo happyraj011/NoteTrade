@@ -8,7 +8,7 @@ export async function POST(request:NextRequest) {
   dbConnect();
   try {
     const reqBody=await request.json();
-    if(!reqBody.boardName ||  !reqBody.className  ||  !reqBody.score ||  !reqBody.subjectName  ||   !reqBody.price ){
+    if(!reqBody.boardName ||  !reqBody.className  ||  !reqBody.score ||  !reqBody.subjectName  ||   !reqBody.price ||  !reqBody.content ){
              return NextResponse.json({
              success:false,
              message:"Please provide all required fields",
