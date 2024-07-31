@@ -18,9 +18,15 @@ export async function POST(request:NextRequest) {
         })
     }  
 
+    
+
     const user=await getDataFromToken(request);
+
+    const title=user+reqBody.boardName+reqBody.className+reqBody.subjectName+reqBody.edition;
+    const slug=title.split(' ').join('-').toLowerCase().replace(/[^a-zA-Z0-9-]/g, '');
     const newBook=new Book({
         ...reqBody,
+        slug,
         userId:user
     })
     await newBook.save();

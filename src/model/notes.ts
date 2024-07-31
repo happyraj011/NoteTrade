@@ -40,6 +40,11 @@ const notesSchema=new mongoose.Schema({
         type:String,
         required:true
     },
+    slug:{
+        type:String,
+        required:true,
+        unique:true,
+    }
    
 },{
     timestamps:true,

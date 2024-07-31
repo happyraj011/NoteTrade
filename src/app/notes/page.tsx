@@ -11,7 +11,8 @@ interface Product {
   className: "";
   subjectName: "";
   price: "";
-  score:""
+  score:"";
+  slug:"";
 }
 
 interface APIResponse {

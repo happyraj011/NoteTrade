@@ -9,20 +9,18 @@ export async function POST(request: NextRequest) {
     const url = new URL(request.url);
     const className = url.searchParams.get("className");
     const boardName = url.searchParams.get("boardName");
+    const slug=url.searchParams.get("slug")
+   
+    const filter: any = {};
+    if (className) filter.className = className;
+    if (boardName) filter.boardName = boardName;
+    if (slug) filter.slug = slug;
 
-    if (!className || !boardName) {
-      return NextResponse.json({
-        success: false,
-        message: "Missing query parameters"
-      }, { status: 400 });
-    }
+    
 
     const product = await Note.aggregate([
       {
-        $match: {
-          className: className,
-          boardName: boardName
-        }
+        $match: filter
       }
     ]).exec();
 

@@ -28,12 +28,17 @@ const booksSchema=new mongoose.Schema({
         required:true,
     },
     edition:{
-        type:Number
+        type:Number,
     },
     content:{
         type:String,
         required:true
     },
+    slug:{
+        type:String,
+        required:true,
+        unique:true,
+    }
 },{
     timestamps:true,
 })

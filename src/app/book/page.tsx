@@ -2,7 +2,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import ProductCard from "@/components/productBookCard";
-import { Button } from "flowbite-react";
+import { Button, Select } from "flowbite-react";
 
 interface Product {
   _id: string;
@@ -12,6 +12,7 @@ interface Product {
   subjectName: "";
   price: "";
   edition: "";
+  slug:"",
 }
 
 interface APIResponse {
@@ -59,10 +60,8 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-between p-8 sm:p-24">
       <div className="grid grid-flow-col gap-4 w-full sm:w-auto">
         <div className="relative w-full sm:w-auto">
-          <label htmlFor="boardName" className="block mb-2 text-sm font-medium text-gray-700">
-            Board Name
-          </label>
-          <select
+         
+          <Select
             id="boardName"
             onChange={handleChange}
             value={boardName}
@@ -72,13 +71,10 @@ export default function Home() {
             <option value="CBSE">CBSE</option>
             <option value="ICSE">ICSE</option>
             <option value="State Board">State Board</option>
-          </select>
+          </Select>
         </div>
         <div className="relative w-full sm:w-auto">
-          <label htmlFor="className" className="block mb-2 text-sm font-medium text-gray-700">
-            Class Name
-          </label>
-          <select
+          <Select
             id="className"
             onChange={handleChange}
             value={className}
@@ -90,8 +86,9 @@ export default function Home() {
                 {i + 1}
               </option>
             ))}
-          </select>
+          </Select>
         </div>
+       
         <Button gradientDuoTone="purpleToPink" onClick={handleSubmit} className="self-end">
           Filter
         </Button>
