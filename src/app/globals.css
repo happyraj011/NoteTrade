@@ -16,6 +16,13 @@
   }
 }
 
+[data-theme="dark"] {
+  --background-color: #000000;
+  --text-color: #ffffff;
+  --link-color: #8ab4f8;
+}
+
+
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
@@ -24,6 +31,9 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+    background-color: var(--background-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
 }
 
 @layer utilities {
