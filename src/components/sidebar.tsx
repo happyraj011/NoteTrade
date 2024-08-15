@@ -34,9 +34,19 @@ export default function DashBoard() {
               <Sidebar.Item href="/addNotes">Add Notes</Sidebar.Item>
               
             </Sidebar.Collapse>
-            <Sidebar.Item href="#" icon={HiInbox}>
-              Own Product
-            </Sidebar.Item>
+            <Sidebar.Collapse
+              icon={HiShoppingBag}
+              label="Own Product"
+              renderChevronIcon={(theme, open) => {
+                const IconComponent = open ? HiOutlineMinusSm : HiOutlinePlusSm;
+                return <IconComponent aria-hidden className={twMerge(theme.label.icon.open[open ? 'on' : 'off'])} />;
+              }}
+            >
+              <Sidebar.Item href="/ownBook">Own Book</Sidebar.Item>
+              <Sidebar.Item href="/ownNotes">Own Notes</Sidebar.Item>
+              
+            </Sidebar.Collapse>
+           
            
             <Sidebar.Item href="#" icon={HiShoppingBag}>
               View Cart
