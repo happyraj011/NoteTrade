@@ -21,7 +21,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const { addToCart } = useCart();
 
   const handleAddToCart = () => {
-    addToCart(product.slug, 1, parseFloat(product.price), product.boardName, product.className, product.subjectName, product.edition,product.image);
+    addToCart(product.slug, 1, parseFloat(product.price), product.boardName, product.className, product.subjectName,product.image,"book");
     setIsAdded(true);
     setTimeout(() => setIsAdded(false), 2000); 
   };

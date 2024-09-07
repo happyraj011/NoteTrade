@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useCart } from '@/context/CartContext';
 import { Button, Card } from 'flowbite-react';
+import Link from 'next/link';
 
 const CartPage: React.FC = () => {
   const { cart, subTotal, removeFromCart, clearCart } = useCart();
@@ -34,25 +35,45 @@ const CartPage: React.FC = () => {
                  
                   <div className="flex-1">
                     <h2 className="text-xl font-semibold text-gray-900 dark:text-white">{item.subjectName}</h2>
-                    <p className="text-gray-600 dark:text-gray-400">Board: {item.boardName}, Class: {item.className}, Edition: {item.edition}</p>
+                    <p className="text-gray-600 dark:text-gray-400">Board: {item.boardName}, Class: {item.className},Type:{item.type}</p>
                     <p className="text-gray-900 dark:text-white">Price: Rs {item.price}</p>
                     <p className="text-gray-900 dark:text-white">Quantity: {item.qty}</p>
                     <div className="flex space-x-2 mt-4">
                       <Button
                         color="red"
                         onClick={() => removeFromCart(itemCode, 1)}
-                        className="flex-1"
+                        className="flex-1 bg-blue-100"
                       >
                         Remove 1
                       </Button>
                       <Button
                         color="gray"
                         onClick={() => removeFromCart(itemCode, item.qty)}
-                        className="flex-1"
+                        className="flex-1 bg-blue-100"
                       >
                         Remove All
                       </Button>
                     </div>
+                   {item.type==='book' ? (
+                         <Link
+                      
+                         href={`/bookPage/${item.itemCode}`}
+                         className="rounded-lg bg-blue-400 px-5 py-2.5 text-center text-sm font-medium text-red hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-500 dark:bg-blue-500 dark:hover:bg-blue-800 dark:focus:ring-blue-500 transition mt-4 block"
+                         >
+                         Read Article
+                       </Link>
+                   )
+                    :(
+                       <Link
+                      
+                       href={`/NotesPage/${item.itemCode}`}
+                       className="rounded-lg bg-blue-400 px-5 py-2.5 text-center text-sm font-medium text-red hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-500 dark:bg-blue-500 dark:hover:bg-blue-800 dark:focus:ring-blue-500 transition mt-4 block"
+                     >
+                       Read Article
+                     </Link>
+                     
+                    )
+                  }
                   </div>
                 </div>
               </Card>

@@ -48,7 +48,7 @@ export default function DashBoard() {
             </Sidebar.Collapse>
            
            
-            <Sidebar.Item href="#" icon={HiShoppingBag}>
+            <Sidebar.Item href="/addToCart" icon={HiShoppingBag}>
               View Cart
             </Sidebar.Item>
             

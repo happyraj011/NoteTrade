@@ -8,13 +8,13 @@ interface CartItem {
   boardName: string;
   className: string;
   subjectName: string;
-  edition: string;
   image: string;
+  type:string
 }
 
 interface CartContextType {
   cart: { [key: string]: CartItem };
-  addToCart: (itemCode: string, qty: number, price: number, boardName: string, className: string, subjectName: string, edition: string, image: string) => void;
+  addToCart: (itemCode: string, qty: number, price: number, boardName: string, className: string, subjectName: string, image: string,type:string) => void;
   removeFromCart: (itemCode: string, qty: number) => void;
   clearCart: () => void;
   subTotal: number;
@@ -49,12 +49,12 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setSubTotal(subt);
   };
 
-  const addToCart = (itemCode: string, qty: number, price: number, boardName: string, className: string, subjectName: string, edition: string, image: string) => {
+  const addToCart = (itemCode: string, qty: number, price: number, boardName: string, className: string, subjectName: string, image: string,type:string) => {
     let newCart = { ...cart };
     if (itemCode in newCart) {
       newCart[itemCode].qty += qty;
     } else {
-      newCart[itemCode] = { itemCode, qty, price, boardName, className, subjectName, edition, image };
+      newCart[itemCode] = { itemCode, qty, price, boardName, className, subjectName, image,type };
     }
     setCart(newCart);
     saveCart(newCart);
