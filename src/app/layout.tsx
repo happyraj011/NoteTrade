@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/header";
 import Sidebar from "@/components/sidebar"
 import { CartProvider } from "@/context/CartContext";
+import Footer from "@/components/footer";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -27,7 +28,7 @@ export default function RootLayout({
           <CartProvider>
           {children}
           </CartProvider>
-            
+            <Footer/>
           </div>
         </div>
       </div>

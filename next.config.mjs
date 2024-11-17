@@ -1,8 +1,21 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    images: {
-        domains: ['via.placeholder.com','www.shutterstock.com','randomuser.me'],
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'via.placeholder.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'www.shutterstock.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'randomuser.me',
+      },
+    ],
+  },
 };
 
 export default nextConfig;
