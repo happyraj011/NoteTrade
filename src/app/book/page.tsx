@@ -12,7 +12,7 @@ interface Product {
   subjectName: "";
   price: "";
   edition: "";
-  slug:"",
+  slug: "";
 }
 
 interface APIResponse {
@@ -57,48 +57,54 @@ export default function Home() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-8 sm:p-8">
-      <div className="grid grid-flow-col gap-4 w-full sm:w-auto">
-        <div className="relative w-full sm:w-auto">
-         
-          <Select
-            id="boardName"
-            onChange={handleChange}
-            value={boardName}
-            className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
+    <main className="flex min-h-screen flex-col items-center justify-between bg-gradient-to-r from-blue-50 via-gray-100 to-gray-200 p-8 sm:p-8">
+      <div className="w-full sm:w-auto mb-8">
+        <div className="flex flex-col sm:flex-row justify-between gap-6">
+          <div className="relative w-full sm:w-1/2">
+            <Select
+              id="boardName"
+              onChange={handleChange}
+              value={boardName}
+              className="block w-full p-4 border-2 border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-600 transition duration-300 ease-in-out hover:border-indigo-500"
+            >
+              <option value="">Select your board name</option>
+              <option value="CBSE">CBSE</option>
+              <option value="ICSE">ICSE</option>
+              <option value="State Board">State Board</option>
+            </Select>
+          </div>
+
+          <div className="relative w-full sm:w-1/2">
+            <Select
+              id="className"
+              onChange={handleChange}
+              value={className}
+              className="block w-full p-4 border-2 border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-600 transition duration-300 ease-in-out hover:border-indigo-500"
+            >
+              <option value="">Select class</option>
+              {Array.from({ length: 10 }, (_, i) => (
+                <option key={i + 1} value={i + 1}>
+                  {i + 1}
+                </option>
+              ))}
+            </Select>
+          </div>
+
+          <Button
+            gradientDuoTone="purpleToPink"
+            onClick={handleSubmit}
+            className="self-center w-full sm:w-auto text-white font-semibold shadow-md hover:bg-gradient-to-r hover:from-indigo-600 hover:to-purple-600 transition duration-300 ease-in-out"
           >
-            <option value="">Select your board name</option>
-            <option value="CBSE">CBSE</option>
-            <option value="ICSE">ICSE</option>
-            <option value="State Board">State Board</option>
-          </Select>
+            Filter
+          </Button>
         </div>
-        <div className="relative w-full sm:w-auto">
-          <Select
-            id="className"
-            onChange={handleChange}
-            value={className}
-            className="block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
-          >
-            <option value="">Select class</option>
-            {Array.from({ length: 10 }, (_, i) => (
-              <option key={i + 1} value={i + 1}>
-                {i + 1}
-              </option>
-            ))}
-          </Select>
-        </div>
-       
-        <Button gradientDuoTone="purpleToPink" onClick={handleSubmit} className="self-end">
-          Filter
-        </Button>
       </div>
 
       <div className="flex flex-col gap-10 p-8 px-3 max-w-6xl mx-auto">
         <div className="max-w-6xl mx-auto p-3 flex flex-col gap-10 py-7">
           {products && products.length > 0 ? (
             <div className="flex flex-col gap-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
                 {products.map((product) => (
                   <ProductCard key={product._id} product={product} />
                 ))}
