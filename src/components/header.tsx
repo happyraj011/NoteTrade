@@ -13,20 +13,26 @@ interface User {
 
 export default function Header() {
   const [data, setData] = useState<User | null>(null);
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState('light'); // Default to 'light'
   const router = useRouter();
 
   useEffect(() => {
     const getUserDetails = async () => {
-      const res = await axios.get("/api/user");
-      setData(res.data.data);
+      try {
+        const res = await axios.get("/api/user");
+        setData(res.data.data);
+      } catch (error) {
+        console.error("Failed to fetch user data:", error);
+      }
     };
+
+    // Fetch user data
     getUserDetails();
 
-   
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    setTheme(savedTheme);
-    document.documentElement.setAttribute('data-theme', savedTheme);
+    // Update theme from localStorage
+    const storedTheme = localStorage.getItem("theme") || 'light';
+    setTheme(storedTheme);
+    document.documentElement.setAttribute("data-theme", storedTheme);
   }, []);
 
   const toggleTheme = () => {
@@ -38,10 +44,10 @@ export default function Header() {
 
   const logout = async () => {
     try {
-      await axios.get("api/logout");
+      await axios.get("/api/logout");
       router.push('/login');
       setData(null);
-    } catch (error:any) {
+    } catch (error: any) {
       console.log(error.message);
     }
   };
@@ -56,15 +62,15 @@ export default function Header() {
       </Link>
 
       <div className="flex gap-8 md:order-2 items-center">
-      <Button 
-      className='w-12 h-10 hidden sm:inline'
-      color='gray'
-      pill
-       onClick={toggleTheme}>
+        <Button 
+          className='w-12 h-10 hidden sm:inline'
+          color='gray'
+          pill
+          onClick={toggleTheme}
+        >
           {theme === 'light' ? <FaSun /> : <FaMoon />}
         </Button>
         <Navbar.Toggle />
-      
 
         {data ? (
           <Dropdown arrowIcon={false} inline label={<Avatar alt="user" rounded />}>
@@ -74,9 +80,9 @@ export default function Header() {
                 {data.email}
               </span>
             </Dropdown.Header>
-            <Link href="/profile">
-              <Dropdown.Item>Profile</Dropdown.Item>
-            </Link>
+            <Dropdown.Item onClick={() => router.push('/profile')}>
+              Profile
+            </Dropdown.Item>
             <Dropdown.Divider />
             <Dropdown.Item onClick={logout}>Logout</Dropdown.Item>
           </Dropdown>
@@ -87,7 +93,8 @@ export default function Header() {
             </Button>
           </Link>
         )}
-        </div>
+      </div>
+
       <Navbar.Collapse className="text-sm sm:text-base font-medium">
         <Navbar.Link href="/" active>
           Home
