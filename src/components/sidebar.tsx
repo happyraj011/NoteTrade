@@ -20,7 +20,7 @@ export default function DashBoard() {
         <Sidebar.Items>
           <Sidebar.ItemGroup>
             {/* Dashboard Item */}
-            <Sidebar.Item href="#" icon={HiChartPie} className="text-gray-800 dark:text-white">
+            <Sidebar.Item href="/" icon={HiChartPie} className="text-gray-800 dark:text-white">
               Dashboard
             </Sidebar.Item>
 

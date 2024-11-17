@@ -1,7 +1,7 @@
 "use client";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import ProductCard from "@/components/productBookCard";
+import ProductCard from "@/components/productNotesCard";
 import { Button, Select } from "flowbite-react";
 
 interface Product {
@@ -11,7 +11,7 @@ interface Product {
   className: string;
   subjectName: string;
   price: string;
-  edition: string;
+  score:string;
   slug: string;
 }
 
@@ -28,7 +28,7 @@ export default function Home() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get<APIResponse>("/api/getAllBook");
+        const res = await axios.get<APIResponse>("/api/getAllNotes");
         setProducts(res.data.message);
       } catch (error: any) {
         console.log(error.message);
@@ -110,9 +110,9 @@ export default function Home() {
         <div className="max-w-6xl mx-auto p-3 flex flex-col gap-10 py-7">
           {products.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-              {products.map((product) => (
-                <ProductCard key={product._id} product={product} />
-              ))}
+            {products.map((product) => (
+                  <ProductCard key={product._id} product={product} />
+                ))}
             </div>
           ) : (
             <p className="text-center text-lg text-gray-500">No products available</p>
