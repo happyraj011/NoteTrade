@@ -13,7 +13,8 @@ import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 
 // Dynamically import ReactQuill and Image with { ssr: false }
-const ReactQuillNoSSR = dynamic(() => import("react-quill"), { ssr: false });
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+import "react-quill/dist/quill.snow.css";
 const ImageNoSSR = dynamic(() => import("next/image"), { ssr: false });
 
 export default function Page() {
@@ -270,14 +271,12 @@ export default function Page() {
         )}
 
         <div className="flex flex-col gap-4">
-          <ReactQuillNoSSR
-            theme="snow"
-            placeholder="Write something...."
-            className="h-72 mb-12"
-            onChange={(value) => {
-              setFormData({ ...formData, content: value });
-            }}
-          />
+        <ReactQuill
+          theme="snow"
+          placeholder="Write something...."
+          className="h-72 mb-12"
+          onChange={(value) => setFormData(prev => ({ ...prev, content: value }))}
+        />
         </div>
 
         {publishError && <Alert color="failure">{publishError}</Alert>}
