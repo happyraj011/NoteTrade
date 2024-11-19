@@ -131,12 +131,12 @@ export default function LoginPage() {
               </Alert>
             )}
 
-            <p className="mt-4 text-sm text-center text-gray-500 dark:text-gray-400">
-              Don't have an account?{' '}
-              <Link href="/sign-up" className="text-blue-500 hover:underline">
-                Sign Up
-              </Link>
-            </p>
+<p className="mt-4 text-sm text-center text-gray-500 dark:text-gray-400">
+  Don&apos;t have an account?{' '}
+  <Link href="/sign-up" className="text-blue-500 hover:underline">
+    Sign Up
+  </Link>
+</p>
           </div>
         </div>
       </main>

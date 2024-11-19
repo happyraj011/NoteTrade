@@ -1,6 +1,6 @@
 import React from "react";
 import { FaBook, FaUserFriends, FaRegLightbulb } from "react-icons/fa"; // Book, Users, and Idea icons
-import Image from "next/image"; // For image optimization
+
 
 export default function About() {
   return (

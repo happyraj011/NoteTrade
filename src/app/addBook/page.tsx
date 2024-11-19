@@ -7,6 +7,8 @@ import { app } from "@/firebase.js"
 import { useRouter } from 'next/navigation';
 import ReactQuill from 'react-quill';
 import "react-quill/dist/quill.snow.css";
+import Image from 'next/image';
+
 export default function Page() {
     const [file, setFile] = useState<File | null>(null);
     const [imageUploadProgress, setImageUploadProgress] = useState<number | null>(null);
@@ -172,7 +174,7 @@ export default function Page() {
                 </div>
                 {imageUploadError && <Alert color='failure'>{imageUploadError}</Alert>}
                 {formData.image && (
-            <img  src={formData.image}
+            <Image  src={formData.image}
             alt='upload'
             className="w-full h-72 object-cover"/>
         )}     

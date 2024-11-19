@@ -4,7 +4,7 @@ import axios from "axios";
 import { Badge, Button, Tooltip, Card } from "flowbite-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { FaShoppingCart } from "react-icons/fa";
+
 
 interface Book {
   image: string;

@@ -4,6 +4,7 @@ import { useCart } from '@/context/CartContext';
 import { Button, Card } from 'flowbite-react';
 import Link from 'next/link';
 import axios from 'axios';
+import Image from 'next/image';
 
 const CartPage: React.FC = () => {
   const { cart, subTotal, removeFromCart, clearCart } = useCart();
@@ -43,7 +44,7 @@ const CartPage: React.FC = () => {
               <Card key={itemCode} className="bg-white p-6 rounded-lg shadow-xl border border-gray-300">
                 <div className="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-6">
                   <div className="flex-shrink-0 w-full md:w-1/4">
-                    <img
+                    <Image
                       src={item.image}
                       alt={`${item.subjectName} cover image`}
                       className="w-full h-48 object-cover rounded-lg shadow-md"
