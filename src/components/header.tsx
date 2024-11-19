@@ -4,24 +4,12 @@ import { Avatar, Button, Dropdown, Navbar, Spinner } from "flowbite-react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { FaMoon, FaSun, FaBook } from "react-icons/fa";
+import { FaBook } from "react-icons/fa";
 
 interface User {
   username: string;
   email: string;
 }
-
-const ThemeToggle = ({ theme, toggleTheme }: { theme: string; toggleTheme: () => void }) => (
-  <Button
-    className="w-12 h-10 hidden sm:inline"
-    color="gray"
-    pill
-    onClick={toggleTheme}
-    aria-label="Toggle Theme"
-  >
-    {theme === "light" ? <FaSun /> : <FaMoon />}
-  </Button>
-);
 
 const UserDropdown = ({
   user,
@@ -45,7 +33,6 @@ const UserDropdown = ({
 
 export default function Header() {
   const [data, setData] = useState<User | null>(null);
-  const [theme, setTheme] = useState("light");
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const pathname = usePathname();
@@ -63,18 +50,7 @@ export default function Header() {
     };
 
     fetchUserData();
-
-    const storedTheme = localStorage.getItem("theme") || "light";
-    setTheme(storedTheme);
-    document.documentElement.setAttribute("data-theme", storedTheme);
   }, []);
-
-  const toggleTheme = () => {
-    const newTheme = theme === "light" ? "dark" : "light";
-    setTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
-    document.documentElement.setAttribute("data-theme", newTheme);
-  };
 
   const logout = async () => {
     try {
@@ -90,18 +66,17 @@ export default function Header() {
     <Navbar className="border-b-2 py-4">
       <Link href="/" className="flex items-center space-x-2 group">
         <FaBook className="text-indigo-500 group-hover:text-pink-500 transition-colors duration-300" size={24} />
-       <span
-  className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-orange-500 via-yellow-400 to-red-500 
+        <span
+          className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-orange-500 via-yellow-400 to-red-500 
              bg-clip-text text-transparent group-hover:bg-gradient-to-r 
              group-hover:from-purple-500 group-hover:via-pink-500 group-hover:to-indigo-500 
              transition-all duration-300"
->
-  Note<span className="font-extrabold">Trade</span>
-</span>
+        >
+          Note<span className="font-extrabold">Trade</span>
+        </span>
       </Link>
 
       <div className="flex gap-8 md:order-2 items-center">
-        <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
         <Navbar.Toggle />
 
         {loading ? (

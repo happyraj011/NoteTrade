@@ -172,7 +172,7 @@ export default function Page() {
             }
           >
             <option value="uncategorised">Select class</option>
-            {Array.from({ length: 10 }, (_, i) => (
+            {Array.from({ length: 12 }, (_, i) => (
               <option key={i + 1} value={i + 1}>
                 {i + 1}
               </option>

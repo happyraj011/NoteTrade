@@ -85,7 +85,7 @@ export default function Home() {
               className="block w-full p-4 border-2 border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-600 transition duration-300 ease-in-out hover:border-indigo-500"
             >
               <option value="">Select class</option>
-              {Array.from({ length: 10 }, (_, i) => (
+              {Array.from({ length: 12 }, (_, i) => (
                 <option key={i + 1} value={i + 1}>
                   {i + 1}
                 </option>

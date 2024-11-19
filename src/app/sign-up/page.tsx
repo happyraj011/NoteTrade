@@ -54,8 +54,11 @@ export default function Page() {
   };
 
   return (
-    <div className="min-h-screen mt-20 flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100">
-      <div className="max-w-3xl w-full p-6 md:flex md:items-center gap-6">
+    <div className="min-h-screen flex flex-col">
+
+<main className="flex flex-1 items-center justify-center bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100">
+
+<div className="flex flex-col md:flex-row items-center max-w-4xl mx-auto gap-6 p-6">
         {/* Left Section */}
         <div className="flex-1">
           <Link href="/" className="flex items-center space-x-4 group">
@@ -157,6 +160,7 @@ export default function Page() {
           )}
         </div>
       </div>
+    </main>
     </div>
   );
 }
