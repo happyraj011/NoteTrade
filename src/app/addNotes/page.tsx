@@ -1,6 +1,6 @@
 "use client";
 import { Alert, Button, FileInput, Select, TextInput } from "flowbite-react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { CircularProgressbar } from "react-circular-progressbar";
 import {
   getDownloadURL,
@@ -10,22 +10,18 @@ import {
 } from "firebase/storage";
 import { app } from "@/firebase.js";
 import { useRouter } from "next/navigation";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
-import Image from "next/image";
+import dynamic from "next/dynamic";
+
+// Dynamically import ReactQuill and Image with { ssr: false }
+const ReactQuillNoSSR = dynamic(() => import("react-quill"), { ssr: false });
+const ImageNoSSR = dynamic(() => import("next/image"), { ssr: false });
 
 export default function Page() {
   const [file, setFile] = useState<File | null>(null);
   const [certificate, setCertificate] = useState<File | null>(null);
-  const [imageUploadProgress, setImageUploadProgress] = useState<number | null>(
-    null
-  );
-  const [certificateUploadProgress, setCertificateUploadProgress] = useState<
-    number | null
-  >(null);
-  const [imageUploadError, setImageUploadError] = useState<
-    string | number | null
-  >(null);
+  const [imageUploadProgress, setImageUploadProgress] = useState<number | null>(null);
+  const [certificateUploadProgress, setCertificateUploadProgress] = useState<number | null>(null);
+  const [imageUploadError, setImageUploadError] = useState<string | number | null>(null);
   const [formData, setFormData] = useState<{ [key: string]: any }>({});
   const [publishError, setPublishError] = useState<string | null>(null);
 
@@ -46,8 +42,7 @@ export default function Page() {
       uploadTask.on(
         "state_changed",
         (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           setImageUploadProgress(Number(progress.toFixed(0)));
         },
         (error) => {
@@ -84,8 +79,7 @@ export default function Page() {
       uploadTask.on(
         "state_changed",
         (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
           setCertificateUploadProgress(Number(progress.toFixed(0)));
         },
         (error) => {
@@ -228,7 +222,7 @@ export default function Page() {
         </div>
         {imageUploadError && <Alert color="failure">{imageUploadError}</Alert>}
         {formData.image && (
-          <Image
+          <ImageNoSSR
             src={formData.image}
             alt="upload"
             className="w-full h-72 object-cover"
@@ -258,7 +252,7 @@ export default function Page() {
               <div className="w-16 h-16">
                 <CircularProgressbar
                   value={certificateUploadProgress}
-                  text={`${imageUploadProgress || 0}%`}
+                  text={`${certificateUploadProgress || 0}%`}
                 />
               </div>
             ) : (
@@ -268,29 +262,32 @@ export default function Page() {
         </div>
         {imageUploadError && <Alert color="failure">{imageUploadError}</Alert>}
         {formData.certificate && (
-          <Image
+          <ImageNoSSR
             src={formData.certificate}
-            alt="upload"
+            alt="certificate"
             className="w-full h-72 object-cover"
           />
         )}
 
-        <ReactQuill
-          theme="snow"
-          placeholder="Write something...."
-          className="h-72 mb-12"
-          onChange={(value) => {
-            setFormData({ ...formData, content: value });
-          }}
-        />
+        <div className="flex flex-col gap-4">
+          <ReactQuillNoSSR
+            theme="snow"
+            placeholder="Write something...."
+            className="h-72 mb-12"
+            onChange={(value) => {
+              setFormData({ ...formData, content: value });
+            }}
+          />
+        </div>
+
+        {publishError && <Alert color="failure">{publishError}</Alert>}
         <Button
           type="submit"
-          gradientDuoTone="purpleToPink"
-          className="px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white"
+          gradientDuoTone="purpleToBlue"
+          className="px-6 py-3 mt-5"
         >
-          Publish
+          Publish Notes
         </Button>
-        {publishError && <Alert color="failure">{publishError}</Alert>}
       </form>
     </div>
   );

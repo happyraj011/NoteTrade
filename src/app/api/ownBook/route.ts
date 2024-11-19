@@ -5,14 +5,15 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   await dbConnect(); 
-  
-  try {
-    const id=await getDataFromToken(request);
 
+  try {
+    const id = await getDataFromToken(request);
+
+    // Fetch books for the user
     const product = await Book.aggregate([
       {
-        $match:{
-            userId:id
+        $match: {
+          userId: id
         }
       }
     ]).exec();
@@ -29,7 +30,7 @@ export async function GET(request: NextRequest) {
       message: product
     }, { status: 200 });
 
-  } catch (error:any) {
+  } catch (error: any) {
     console.log("Get Book error", { error });
     return NextResponse.json({
       success: false,
