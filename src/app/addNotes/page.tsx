@@ -22,21 +22,27 @@ export default function Page() {
   const [certificate, setCertificate] = useState<File | null>(null);
   const [imageUploadProgress, setImageUploadProgress] = useState<number | null>(null);
   const [certificateUploadProgress, setCertificateUploadProgress] = useState<number | null>(null);
-  const [imageUploadError, setImageUploadError] = useState<string | number | null>(null);
+  const [imageUploadError, setImageUploadError] = useState<string | null>(null);
   const [formData, setFormData] = useState<{ [key: string]: any }>({});
   const [publishError, setPublishError] = useState<string | null>(null);
 
   const router = useRouter();
 
-  const handleUploadImage = async () => {
+  // Reusable upload function for both image and certificate
+  const handleUpload = async (
+    file: File | null,
+    type: "image" | "certificate",
+    setProgress: React.Dispatch<React.SetStateAction<number | null>>,
+    setError: React.Dispatch<React.SetStateAction<string | null>>
+  ) => {
+    if (!file) {
+      setError(`Please select a ${type}`);
+      return;
+    }
     try {
-      if (!file) {
-        setImageUploadError("Please select an image");
-        return;
-      }
-      setImageUploadError(null);
+      setError(null);
       const storage = getStorage(app);
-      const fileName = new Date().getTime() + "-" + file.name;
+      const fileName = `${new Date().getTime()}-${file.name}`;
       const storageRef = ref(storage, fileName);
       const uploadTask = uploadBytesResumable(storageRef, file);
 
@@ -44,61 +50,22 @@ export default function Page() {
         "state_changed",
         (snapshot) => {
           const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          setImageUploadProgress(Number(progress.toFixed(0)));
+          setProgress(Math.round(progress));
         },
         (error) => {
-          setImageUploadError("Image upload failed");
-          setImageUploadProgress(null);
+          setError(`${type} upload failed`);
+          setProgress(null);
         },
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            setImageUploadError(null);
-            setImageUploadProgress(null);
-            setFormData({ ...formData, image: downloadURL });
+            setFormData((prev) => ({ ...prev, [type]: downloadURL }));
+            setProgress(null);
           });
         }
       );
     } catch (error) {
-      setImageUploadError("Image upload failed");
-      setImageUploadProgress(null);
-      console.log(error);
-    }
-  };
-
-  const handleUploadCertificate = async () => {
-    try {
-      if (!certificate) {
-        setImageUploadError("Please select an image for certificate");
-        return;
-      }
-      setImageUploadError(null);
-      const storage = getStorage(app);
-      const fileName = new Date().getTime() + "-" + certificate.name;
-      const storageRef = ref(storage, fileName);
-      const uploadTask = uploadBytesResumable(storageRef, certificate);
-
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          setCertificateUploadProgress(Number(progress.toFixed(0)));
-        },
-        (error) => {
-          setImageUploadError("Image upload failed");
-          setCertificateUploadProgress(null);
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-            setImageUploadError(null);
-            setCertificateUploadProgress(null);
-            setFormData({ ...formData, certificate: downloadURL });
-          });
-        }
-      );
-    } catch (error) {
-      setImageUploadError("Image upload failed");
-      setCertificateUploadProgress(null);
-      console.log(error);
+      setError(`${type} upload failed`);
+      setProgress(null);
     }
   };
 
@@ -206,7 +173,9 @@ export default function Page() {
             size="sm"
             outline
             className="px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white"
-            onClick={handleUploadImage}
+            onClick={() =>
+              handleUpload(file, "image", setImageUploadProgress, setImageUploadError)
+            }
             disabled={imageUploadProgress !== null}
           >
             {imageUploadProgress !== null ? (
@@ -226,6 +195,8 @@ export default function Page() {
           <ImageNoSSR
             src={formData.image}
             alt="upload"
+            width={300} // Set a specific width
+            height={200} // Set a specific height
             className="w-full h-72 object-cover"
           />
         )}
@@ -246,7 +217,9 @@ export default function Page() {
             size="sm"
             outline
             className="px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white"
-            onClick={handleUploadCertificate}
+            onClick={() =>
+              handleUpload(certificate, "certificate", setCertificateUploadProgress, setImageUploadError)
+            }
             disabled={certificateUploadProgress !== null}
           >
             {certificateUploadProgress !== null ? (
@@ -257,7 +230,7 @@ export default function Page() {
                 />
               </div>
             ) : (
-              "Upload certificate"
+              "Upload Certificate"
             )}
           </Button>
         </div>
@@ -266,26 +239,25 @@ export default function Page() {
           <ImageNoSSR
             src={formData.certificate}
             alt="certificate"
+            width={300} // Set a specific width
+            height={200} // Set a specific height
             className="w-full h-72 object-cover"
           />
         )}
 
         <div className="flex flex-col gap-4">
-        <ReactQuill
-          theme="snow"
-          placeholder="Write something...."
-          className="h-72 mb-12"
-          onChange={(value) => setFormData(prev => ({ ...prev, content: value }))}
-        />
+          <ReactQuill
+            theme="snow"
+            placeholder="Write something...."
+            className="h-72 mb-12"
+            onChange={(value) => setFormData((prev) => ({ ...prev, content: value }))}
+          />
         </div>
 
         {publishError && <Alert color="failure">{publishError}</Alert>}
-        <Button
-          type="submit"
-          gradientDuoTone="purpleToBlue"
-          className="px-6 py-3 mt-5"
-        >
-          Publish Notes
+
+        <Button type="submit" gradientDuoTone="purpleToBlue">
+          Publish
         </Button>
       </form>
     </div>

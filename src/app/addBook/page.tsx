@@ -1,15 +1,17 @@
-"use client"
-import { Alert, Button, FileInput, Select, TextInput } from 'flowbite-react';
-import React, { useState } from 'react';
-import { CircularProgressbar } from 'react-circular-progressbar';
-import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
+"use client";
+import { Alert, Button, FileInput, Select, TextInput } from "flowbite-react";
+import React, { useState } from "react";
+import { CircularProgressbar } from "react-circular-progressbar";
+import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
 import { app } from "@/firebase.js";
-import { useRouter } from 'next/navigation';
-import dynamic from 'next/dynamic';
+import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
+import "react-circular-progressbar/dist/styles.css";
 import "react-quill/dist/quill.snow.css";
-import Image from 'next/image';
+import Image from "next/image";
 
-const ReactQuill = dynamic(() => import('react-quill'), { ssr: false }); // Dynamically import ReactQuill to avoid SSR errors
+// Dynamically import ReactQuill for client-side rendering
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 export default function Page() {
     const [file, setFile] = useState<File | null>(null);
@@ -28,12 +30,12 @@ export default function Page() {
             }
             setImageUploadError(null);
             const storage = getStorage(app);
-            const fileName = new Date().getTime() + '-' + file.name;
+            const fileName = new Date().getTime() + "-" + file.name;
             const storageRef = ref(storage, fileName);
             const uploadTask = uploadBytesResumable(storageRef, file);
 
             uploadTask.on(
-                'state_changed',
+                "state_changed",
                 (snapshot) => {
                     const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                     setImageUploadProgress(Number(progress.toFixed(0)));
@@ -53,30 +55,30 @@ export default function Page() {
         } catch (error) {
             setImageUploadError("Image upload failed");
             setImageUploadProgress(null);
-            console.log(error);
+            console.error(error);
         }
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
-            const res = await fetch('/api/addBook', {
+            const res = await fetch("/api/addBook", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(formData),
             });
             const data = await res.json();
             if (!res.ok) {
                 setPublishError(data.message);
-            }
-            if (res.ok) {
+            } else {
                 setPublishError(null);
-                router.push('/');
+                router.push("/");
             }
         } catch (error) {
             setPublishError("Something went wrong");
+            console.error(error);
         }
     };
 
@@ -125,7 +127,9 @@ export default function Page() {
                     >
                         <option value="uncategorised">Select class</option>
                         {Array.from({ length: 12 }, (_, i) => (
-                            <option key={i + 1} value={i + 1}>{i + 1}</option>
+                            <option key={i + 1} value={i + 1}>
+                                {i + 1}
+                            </option>
                         ))}
                     </Select>
                 </div>
@@ -158,7 +162,7 @@ export default function Page() {
                         gradientDuoTone="purpleToBlue"
                         size="sm"
                         outline
-                        className='px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white'
+                        className="px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white"
                         onClick={handleUploadImage}
                         disabled={imageUploadProgress !== null}
                     >
@@ -170,16 +174,19 @@ export default function Page() {
                                 />
                             </div>
                         ) : (
-                            'Upload Image'
+                            "Upload Image"
                         )}
                     </Button>
                 </div>
-                {imageUploadError && <Alert color='failure'>{imageUploadError}</Alert>}
+                {imageUploadError && <Alert color="failure">{imageUploadError}</Alert>}
                 {formData.image && (
                     <Image
                         src={formData.image}
-                        alt="upload"
-                        className="w-full h-72 object-cover"
+                        alt="Uploaded Image"
+                        layout="intrinsic"
+                        width={600} // Provide a default width
+                        height={400} // Provide a default height
+                        className="object-cover"
                     />
                 )}
 
@@ -192,11 +199,15 @@ export default function Page() {
                     }}
                 />
 
-                <Button type="submit" gradientDuoTone="purpleToPink" className='px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white'>
+                <Button
+                    type="submit"
+                    gradientDuoTone="purpleToPink"
+                    className="px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white"
+                >
                     Publish
                 </Button>
 
-                {publishError && <Alert color='failure'>{publishError}</Alert>}
+                {publishError && <Alert color="failure">{publishError}</Alert>}
             </form>
         </div>
     );

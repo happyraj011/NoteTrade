@@ -14,6 +14,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'randomuser.me',
       },
+      {
+        protocol: 'https',
+        hostname: 'firebasestorage.googleapis.com', // Add Firebase domain here
+      },
     ],
   },
 };
