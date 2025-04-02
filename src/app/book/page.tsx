@@ -25,19 +25,22 @@ export default function Home() {
   const [className, setClassName] = useState('');
   const [loading, setLoading] = useState(false);
 
+  const fetchProducts = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get<APIResponse>("/api/getAllBook", {
+        headers: { "Cache-Control": "no-store" }, // Ensure fresh data
+      });
+      setProducts(res.data.message || []);
+    } catch (error: any) {
+      console.log(error.message);
+      setProducts([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchProducts = async () => {
-      setLoading(true);
-      try {
-        const res = await axios.get<APIResponse>("/api/getAllBook");
-        setProducts(res.data.message || []);
-      } catch (error: any) {
-        console.log(error.message);
-        setProducts([]);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchProducts();
   }, []);
 
@@ -126,9 +129,8 @@ export default function Home() {
             </div>
           ) : (
             <p className="text-center text-lg font-semibold text-gray-700 bg-gradient-to-r from-gray-100 via-gray-200 to-gray-300 border border-gray-400 rounded-2xl p-6 shadow-lg animate-pulse">
-  No products available. Please try a different filter.
-</p>
-
+              No products available. Please try a different filter.
+            </p>
           )}
         </div>
       </div>
