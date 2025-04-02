@@ -1,8 +1,8 @@
-import { Card } from "flowbite-react";
+import { Card, Avatar, AvatarGroup } from "flowbite-react"; // Imported Avatar from Flowbite
 import Image from "next/image";
 import Head from "next/head";
-import Link from "next/link"; // Import Link for dynamic navigation
-import { FaBook } from "react-icons/fa"; // Import FaBook from react-icons
+import Link from "next/link";
+import { FaBook } from "react-icons/fa";
 
 export default function Home() {
   return (
@@ -24,7 +24,7 @@ export default function Home() {
             <Link href="/" className="flex items-center space-x-4 group mb-4">
               <FaBook
                 className="text-indigo-500 group-hover:text-pink-500 transition-colors duration-300"
-                size={48} // Enlarged size
+                size={48}
               />
               <span
                 className="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-orange-500 via-yellow-400 to-red-500 
@@ -40,7 +40,8 @@ export default function Home() {
               Explore Our Collection 📚
             </h1>
             <p className="mt-4 text-lg text-gray-600">
-              Discover the best prices for buying and selling textbooks. Explore our exclusive authors and trending books today!
+              Discover the best prices for buying and selling textbooks. Explore
+              our exclusive authors and trending books today!
             </p>
             {/* Dynamic Explore Button */}
             <Link href="/notes">
@@ -74,41 +75,32 @@ export default function Home() {
                 width={300}
                 height={200}
                 className="object-cover rounded-lg transition-all duration-300 ease-in-out hover:scale-105"
-                placeholder="blur"
-                blurDataURL="/path/to/your/blur-image.jpg"
                 loading="lazy"
               />
             </div>
             <div className="flex-1 flex flex-col justify-center p-4 text-center">
-              <h2 className="text-lg md:text-xl font-semibold">Our Exclusive Author</h2>
+              <h2 className="text-lg md:text-xl font-semibold">
+                Our Exclusive Author
+              </h2>
               <div className="flex justify-center items-center mt-4">
-                {/* Avatars using Flowbite */}
-                <div className="relative flex -space-x-4">
-                  <Image
-                    src="https://via.placeholder.com/64"
-                    alt="Author Avatar"
-                    width={64}
-                    height={64}
-                    className="w-16 h-16 object-cover rounded-full border-2 border-white shadow-md"
-                    loading="lazy"
+                <AvatarGroup>
+                  <Avatar
+                    img="https://randomuser.me/api/portraits/men/1.jpg"
+                    rounded
+                    stacked
                   />
-                  <Image
-                    src="https://via.placeholder.com/64"
-                    alt="Author Avatar"
-                    width={64}
-                    height={64}
-                    className="w-16 h-16 object-cover rounded-full border-2 border-white shadow-md"
-                    loading="lazy"
+                  <Avatar
+                    img="https://randomuser.me/api/portraits/women/2.jpg"
+                    rounded
+                    stacked
                   />
-                  <Image
-                    src="https://via.placeholder.com/64"
-                    alt="Author Avatar"
-                    width={64}
-                    height={64}
-                    className="w-16 h-16 object-cover rounded-full border-2 border-white shadow-md"
-                    loading="lazy"
+                  <Avatar
+                    img="https://randomuser.me/api/portraits/men/3.jpg"
+                    rounded
+                    stacked
                   />
-                </div>
+                  <Avatar.Counter total={5} href="#" />
+                </AvatarGroup>
               </div>
               <p className="mt-4">More than 5k books</p>
             </div>
@@ -123,13 +115,13 @@ export default function Home() {
                 width={300}
                 height={200}
                 className="object-cover rounded-lg transition-all duration-300 ease-in-out hover:scale-105"
-                placeholder="blur"
-                blurDataURL="/path/to/your/blur-image.jpg"
                 loading="lazy"
               />
             </div>
             <div className="flex-1 flex flex-col justify-center p-4 text-center">
-              <h2 className="text-lg md:text-xl font-semibold">Trending Books</h2>
+              <h2 className="text-lg md:text-xl font-semibold">
+                Trending Books
+              </h2>
               <p>Explore trending books of this week</p>
               <button className="mt-4 px-6 py-2 bg-[#f06565] text-white font-semibold rounded-lg shadow-md hover:bg-[#d9534f] transition-colors duration-300 ease-in-out">
                 View More
