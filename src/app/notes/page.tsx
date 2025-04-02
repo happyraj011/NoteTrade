@@ -11,48 +11,46 @@ interface Product {
   className: string;
   subjectName: string;
   price: string;
-  score:string;
+  score: string;
   slug: string;
-}
-
-interface APIResponse {
-  message: Product[];
 }
 
 export default function Home() {
   const [products, setProducts] = useState<Product[]>([]);
   const [boardName, setBoardName] = useState<string>('');
   const [className, setClassName] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  // Fetching the products initially when the component mounts
+  // Fetch initial products
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get<APIResponse>("/api/getAllNotes");
-        setProducts(res.data.message);
-      } catch (error: any) {
-        console.log(error.message);
+        const res = await axios.get("/api/getAllNotes");
+        setProducts(res.data.message || []);
+      } catch (error) {
+        console.error("Failed to fetch products:", error);
+        setProducts([]);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchProducts();
   }, []);
 
-  // Handling changes in the select input
-  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const { id, value } = e.target;
-    if (id === "boardName") setBoardName(value);
-    if (id === "className") setClassName(value);
-  };
-
-  // Fetching products based on the selected filters
+  // Handle filter submission
   const handleSubmit = async () => {
-    if (!boardName || !className) return; // Prevent API call if no filter is selected
-
+    if (!boardName || !className) return;
+    
+    setIsLoading(true);
+    
     try {
-      const res = await axios.post<APIResponse>(`/api/getBook?className=${className}&boardName=${boardName}`);
-      setProducts(res.data.message);
-    } catch (error: any) {
-      console.log(error.message);
+      const res = await axios.post(`/api/getBook?className=${className}&boardName=${boardName}`);
+      setProducts(res.data.message || []);
+    } catch (error) {
+      console.error("Filter failed:", error);
+      setProducts([]);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -62,62 +60,60 @@ export default function Home() {
       <div className="w-full sm:w-auto mb-8">
         <div className="flex flex-col sm:flex-row justify-between gap-6">
           {/* Board Name Select */}
-          <div className="relative w-full sm:w-1/2">
-            <Select
-              id="boardName"
-              onChange={handleChange}
-              value={boardName}
-              className="block w-full p-4 border-2 border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-600 transition duration-300 ease-in-out hover:border-indigo-500"
-            >
-              <option value="">Select your board name</option>
-              <option value="CBSE">CBSE</option>
-              <option value="ICSE">ICSE</option>
-              <option value="State Board">State Board</option>
-            </Select>
-          </div>
+          <Select
+            id="boardName"
+            onChange={(e) => setBoardName(e.target.value)}
+            value={boardName}
+            className="w-full sm:w-1/2"
+          >
+            <option value="">Select your board name</option>
+            <option value="CBSE">CBSE</option>
+            <option value="ICSE">ICSE</option>
+            <option value="State Board">State Board</option>
+          </Select>
 
           {/* Class Name Select */}
-          <div className="relative w-full sm:w-1/2">
-            <Select
-              id="className"
-              onChange={handleChange}
-              value={className}
-              className="block w-full p-4 border-2 border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-600 transition duration-300 ease-in-out hover:border-indigo-500"
-            >
-              <option value="">Select class</option>
-              {Array.from({ length: 12 }, (_, i) => (
-                <option key={i + 1} value={i + 1}>
-                  {i + 1}
-                </option>
-              ))}
-            </Select>
-          </div>
+          <Select
+            id="className"
+            onChange={(e) => setClassName(e.target.value)}
+            value={className}
+            className="w-full sm:w-1/2"
+          >
+            <option value="">Select class</option>
+            {Array.from({ length: 12 }, (_, i) => (
+              <option key={i + 1} value={i + 1}>
+                {i + 1}
+              </option>
+            ))}
+          </Select>
 
-          {/* Filter Button */}
           <Button
             gradientDuoTone="purpleToPink"
             onClick={handleSubmit}
-            className="self-center w-full sm:w-auto text-white font-semibold shadow-md hover:bg-gradient-to-r hover:from-indigo-600 hover:to-purple-800 transition duration-300 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={!boardName || !className} // Disable button if no selection is made
+            disabled={!boardName || !className}
           >
             Filter
           </Button>
         </div>
       </div>
 
-      {/* Product Cards Section */}
-      <div className="flex flex-col gap-10 p-8 px-3 max-w-6xl mx-auto">
-        <div className="max-w-6xl mx-auto p-3 flex flex-col gap-10 py-7">
-          {products.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+      {/* Product Display Section */}
+      <div className="w-full max-w-6xl">
+        {isLoading ? (
+          <div className="text-center py-10">
+            <p>Loading products...</p>
+          </div>
+        ) : products.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
             {products.map((product) => (
-                  <ProductCard key={product._id} product={product} />
-                ))}
-            </div>
-          ) : (
-            <p className="text-center text-lg text-gray-500">No products available</p>
-          )}
-        </div>
+              <ProductCard key={product._id} product={product} />
+            ))}
+          </div>
+        ) : (
+          <p className="text-center text-lg font-semibold text-gray-700 bg-gradient-to-r from-gray-100 via-gray-200 to-gray-300 border border-gray-400 rounded-2xl p-6 shadow-lg animate-pulse">
+          No products available. Please try a different filter.
+        </p>
+        )}
       </div>
     </main>
   );
